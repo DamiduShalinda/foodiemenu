@@ -49,7 +49,7 @@ const MenuItem : React.FC<MenuItemProps> = ({menuItem , addToCart , removeFromCa
                   ${menuItem.price}
                 </span>
               </div>
-              <div className='flex flex-row items-center justify-start mt-2 gap-2'>
+              <div className='flex flex-row items-center md:justify-start justify-center mt-2 gap-2'>
                 <span className='border border-black p-1 rounded-l-md'>
                     <AiOutlineMinus onClick={() => {decrement(); removeFromCart();} } size={15}/>
                 </span>

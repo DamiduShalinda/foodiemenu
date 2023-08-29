@@ -1,10 +1,23 @@
 import React from 'react'
+import { collection , addDoc , serverTimestamp } from '@firebase/firestore';
 import { menuItems } from '../data'
 import MenuItem from '../components/MenuItem'
+import { useAuth } from '../context/Auth'
+import { db } from '../FirebaseConfig';
 
+interface cartItem {
+  [key: number]: number;
+  title : string;	
+  quantity : number;
+}
 const Home : React.FC = () => {
 
+  const { user} = useAuth();
   const[ cart , setCart ] = React.useState<Record<string , number>>({})
+  const [ cartItems , setCartItems ] = React.useState<cartItem[]>([])
+  const orderRef = collection(db , 'orders');
+
+  const { isAuth} = useAuth();
 
   const addToCart = (id: number) => {
     setCart((prev) => {
@@ -19,19 +32,39 @@ const Home : React.FC = () => {
   }
 
   const handleCheckout = () => {
-    console.log('Cart Contents:');
+    const tempcartItems: cartItem[] = [];
     for (const itemId in cart) {
       const menuItem = menuItems.find((item) => item.id === parseInt(itemId));
       if (menuItem) {
-        console.log(`${menuItem.title}: ${cart[itemId]}`);
+        tempcartItems.push({
+          title: menuItem.title,
+          quantity: cart[itemId],
+        });
       }
     }
-  };
+    setCartItems(tempcartItems);
+    addOrder();
+  }
+  
+  const addOrder = async () => {
+    const newData = {
+      userid : user?.uid,
+      cartItems,
+      createdAt: serverTimestamp(),
+    }
+    try {
+      const res = await addDoc(orderRef , newData);
+      console.log(res.id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   return (
-    <div className=' flex items-center justify-center w-full md:h-screen h-full bg-slate-20 text-black px-5 md:px-0'>
-        <div className='md:mt-96 mt-40'>
-          <div className='flex flex-col gap-5 md:mt-60 mb-10'>
+    <div className='flex items-center justify-center w-full md:h-screen h-full bg-slate-20 text-black px-8 md:px-0'>
+        <div className='md:mt-96 mt-5'>
+          <div className='flex flex-col gap-5 md:mt-60 md:mb-10 mb-20'>
             {menuItems.map((menuItem) => {
                 return (
                     <MenuItem menuItem={menuItem} key={menuItem.id} addToCart={() => addToCart(menuItem.id)} removeFromCart={() => removeFromCart(menuItem.id)}/>
@@ -42,8 +75,9 @@ const Home : React.FC = () => {
           </div>
         </div>
         <button 
-          className='fixed bottom-0 right-0 bg-slate-400 text-white px-5 py-2 rounded-tl-md'
+          className='fixed md:bottom-0 md:right-0 bg-slate-400 text-white px-5 py-2 md:rounded-tl-md bottom-14 right-2 rounded-md'
           onClick={handleCheckout}
+          disabled={!isAuth}
           >Order</button>
     </div>
   )
