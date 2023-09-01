@@ -10,6 +10,7 @@ interface cartItem {
   title : string;	
   quantity : number;
 }
+
 const Home : React.FC = () => {
 
   const { user} = useAuth();

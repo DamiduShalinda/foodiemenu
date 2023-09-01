@@ -61,7 +61,7 @@ const AddCatgories:React.FC = () => {
   return (
     <div>
     <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full">
+        <div className="w-full md:w-80">
           <label
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             htmlFor="category"
