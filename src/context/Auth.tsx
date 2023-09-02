@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         try {
             const result: UserCredential = await signInWithPopup(auth, provider);
             setUser(result.user);
+            console.log(result.user);
             setIsAuth(true);
             cookies.set("user", result.user, { path: "/" });
         } catch (error) {

@@ -1,22 +1,9 @@
 import React , { useEffect} from 'react'
-import { collection , addDoc , serverTimestamp , onSnapshot , deleteDoc , doc , getDocs } from '@firebase/firestore';
+import { collection , serverTimestamp , onSnapshot , deleteDoc , doc , getDocs  , addDoc} from '@firebase/firestore';
 import { useForm } from 'react-hook-form'
 import { db } from '../FirebaseConfig';
 
-interface ingredient {
-  name: string;
-  quantity: string;
-}
 
-interface basicData {
-  meal_name: string;
-  description: string;
-  price: number;
-  image: string;
-  receipe_category: string;
-  keywords: string;
-  ingredients: ingredient[];
-}
 
 interface formInput {
   meal_name: string;
@@ -39,12 +26,7 @@ interface formInput {
 }
 
 interface menuitem {
-    title: string;
-    description: string;
-    price: number;
-    image: string;
-    category: string;
-    createdAt: string;
+    meal_name: string;
     id: string;
 }
 
@@ -58,16 +40,19 @@ const AddMenuItems:React.FC = () => {
 
   const onSubmit = async (data: formInput) => {
 
-    const ingredientsArray = data.ingredients.split(',').map((ingredient) => ingredient.trim());
-    
+    const updatedIngredients = data.ingredients.split(',').map((ingredient) => ingredient.trim());
+    const ingredientsstring = updatedIngredients.map(item => JSON.stringify(item));
+    const finalarray = `c(${ingredientsstring.join(', ')})`;
+
     const newData = {
       ...data,
+      ingredients: finalarray,
       createdAt: serverTimestamp(),
     }
-    try {
-      console.log(newData); 
-      // const res = await addDoc(menuItemRef , newData);
-      // console.log(res.id);
+
+    try { 
+      const res = await addDoc(menuItemRef , newData);
+      console.log(res.id);
       reset();
     } catch (error) {
       console.log(error);
@@ -105,9 +90,9 @@ const AddMenuItems:React.FC = () => {
   useEffect(() => {
     const unsubscribe = onSnapshot(menuItemRef , (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
-        ...doc.data(),
+        meal_name: doc.data().meal_name,
         id: doc.id,
-      })) as menuitem[];
+      }));
       setMenuItems(data);
     })
     return unsubscribe;
@@ -169,6 +154,7 @@ const AddMenuItems:React.FC = () => {
           <input
             className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
             type="number"
+            step={0.01}
             placeholder="Enter item's price"
             id="price"
             {...register("price" , {required: true})}
@@ -239,6 +225,7 @@ const AddMenuItems:React.FC = () => {
               type="number"
               placeholder="Enter item's calories"
               id="Calories"
+              step={0.01}
               {...register("Calories")}
               style={{ appearance: "none" }}
             ></input>
@@ -256,11 +243,13 @@ const AddMenuItems:React.FC = () => {
             <input
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
               type="number"
+              step={0.01}
               placeholder="fat content"
               id="FatContent"
               {...register("FatContent")}
             ></input>
                 </div>
+
             {/* menu item saturated fat content */}
             <div className="w-full">
             <label
@@ -272,11 +261,13 @@ const AddMenuItems:React.FC = () => {
             <input
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
               type="number"
+              step={0.01}
               placeholder="saturated fat content"
               id="SaturatedfatContent"
               {...register("SaturatedfatContent")}
             ></input>
                 </div>
+
             {/* menu item carbohydrates content */}
             <div className="w-full">
             <label
@@ -288,11 +279,14 @@ const AddMenuItems:React.FC = () => {
             <input
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
               type="number"
+              step={0.01}
               placeholder="carbohydrates content"
               id="CarbohydratesContent"
               {...register("CarbohydratesContent")}
             ></input>
                 </div>
+
+
             {/* menu item sugar content */}
             <div className="w-full">
             <label
@@ -304,11 +298,13 @@ const AddMenuItems:React.FC = () => {
             <input
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
               type="number"
+              step={0.01}
               placeholder="sugar content"
               id="SugarContent"
               {...register("SugarContent")}
             ></input>
                 </div>
+
             {/* menu item fiber content */}
             <div className="w-full">
             <label
@@ -320,6 +316,7 @@ const AddMenuItems:React.FC = () => {
             <input
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
               type="number"
+              step={0.01}
               placeholder="fiber content"
               id="FiberContent"
               {...register("FiberContent")}
@@ -338,6 +335,7 @@ const AddMenuItems:React.FC = () => {
               type="number"
               placeholder="protein content"
               id="ProteinContent"
+              step={0.01}
               {...register("ProteinContent")}
             ></input>
                 </div>
@@ -352,6 +350,7 @@ const AddMenuItems:React.FC = () => {
             <input
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
               type="number"
+              step={0.01}
               placeholder="cholestrol content"
               id="CholestrolContent"
               {...register("CholestrolContent")}
@@ -368,6 +367,7 @@ const AddMenuItems:React.FC = () => {
             <input
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
               type="number"
+              step={0.01}
               placeholder="sodium content"
               id="SodiumContent"
               {...register("SodiumContent")}
@@ -425,7 +425,7 @@ const AddMenuItems:React.FC = () => {
                 {menuItems.map((menuItem) => {
                     return (
                         <div className='flex flex-row items-center justify-between w-full mt-2' key={menuItem.id}>
-                            <p>{menuItem.title}</p>
+                            <p>{menuItem.meal_name}</p>
                             <button className='bg-red-200  px-3 py-1 rounded-md mt-2 text-xs' onClick={() => onDelete(menuItem.id)}>
                                 Delete
                             </button>

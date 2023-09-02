@@ -48,16 +48,18 @@ const Home : React.FC = () => {
   }
   
   const addOrder = async () => {
-    const newData = {
-      userid : user?.uid,
-      cartItems,
-      createdAt: serverTimestamp(),
-    }
-    try {
-      const res = await addDoc(orderRef , newData);
-      console.log(res.id);
-    } catch (error) {
-      console.log(error);
+    if (cartItems.length > 0) {
+      const newData = {
+        userid : user?.uid,
+        cartItems,
+        createdAt: serverTimestamp(),
+      }
+      try {
+        const res = await addDoc(orderRef , newData);
+        console.log(res.id);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
