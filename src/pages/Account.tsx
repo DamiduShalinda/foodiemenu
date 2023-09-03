@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-import { collection  , where , query , serverTimestamp , addDoc, onSnapshot , updateDoc} from '@firebase/firestore';
+import { collection  , where , query , serverTimestamp , addDoc, onSnapshot} from '@firebase/firestore';
 import { db } from '../FirebaseConfig';
 import { useAuth } from '../context/Auth';
-import firebase from 'firebase/compat/app';
 import AddUserData from '../components/AddUserData';
 
 export interface userdata {
@@ -78,7 +77,9 @@ const Account:React.FC = () => {
     {loading ? (
       <h1 className="text-xl font-semibold text-center">Loading...</h1>
     ) : userData.length === 0 ? (
-      <AddUserData onSubmit={onSubmit} />
+      <div className='flex mx-auto'>
+        <AddUserData onSubmit={onSubmit} />
+      </div>
     ) : (
       <div className="flex flex-col items-center">
         <h1 className="text-2xl font-bold mb-4">Already have data</h1>

@@ -1,4 +1,5 @@
 import Navbar from "./components/Navbar"
+import ViewAllMeals from "./components/ViewAllMeals"
 import ProtectedRoute from "./context/ProtectedRoute"
 import ProtectedRouteUser from "./context/ProtectedRouteUser"
 import Account from "./pages/Account"
@@ -16,6 +17,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home/>}/>
       <Route path="/categories" element={<Categories/>}/>
+      <Route path="/allitems" element={<ViewAllMeals/>}/>
       <Route path="/account" element={<ProtectedRouteUser><Account/></ProtectedRouteUser>}/>
       <Route path="/admin" element={<ProtectedRoute><AddItems/></ProtectedRoute>}/>
     </Routes>

@@ -26,6 +26,13 @@ const Navbar: React.FC = () => {
                     <p className=''>Home</p> 
                 </Link>
                 </li>
+                {isAuth  && 
+                <li>
+                <Link to='/allitems'>
+                    <p className=''>All Items</p> 
+                </Link>
+                </li>
+                }
                 {isAuth && user?.email === 'shalindadamidu1@gmail.com' || user?.email === 'udayangaayesh.rj@gmail.com' && <li>
                 <Link to='/admin'>
                     <p className=''>Admin</p> 
