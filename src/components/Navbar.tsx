@@ -26,11 +26,11 @@ const Navbar: React.FC = () => {
                     <p className=''>Home</p> 
                 </Link>
                 </li>
-                <li>
-                <Link to='/categories'>
-                    <p className=''>Categories</p> 
+                {isAuth && user?.email === 'shalindadamidu1@gmail.com' || user?.email === 'udayangaayesh.rj@gmail.com' && <li>
+                <Link to='/admin'>
+                    <p className=''>Admin</p> 
                 </Link>
-                </li>
+                </li>}
                 <li>
                 <Link to='/account'>
                     <p className=''>Account</p> 
