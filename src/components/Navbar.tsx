@@ -21,6 +21,20 @@ const Navbar: React.FC = () => {
         <div className='md:flex flex-row items-center justify-between w-full px-10 py-4 hidden'>
             <Link to='/'>Foodie</Link>
             <ul className='flex flex-row items-center justify-center gap-9'>
+                {isAuth  && 
+                <li>
+                <Link to='/allitems'>
+                    <p className=''>All Items</p> 
+                </Link>
+                </li>
+                }
+                {isAuth  && 
+                <li>
+                <Link to='/allitems'>
+                    <p className=''>All Items</p> 
+                </Link>
+                </li>
+                }
                 <li>
                 <Link to='/'>
                     <p className=''>Home</p> 
